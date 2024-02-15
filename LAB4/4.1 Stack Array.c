@@ -10,7 +10,7 @@ void pop(int *arr, int *top);
 void show(int *arr, int *top);
 bool isFull(int *top, int size);
 bool isEmpty(int *top);
-jhghj
+
 int main(void)
 {
     // Input size, initialize top and stack array.
