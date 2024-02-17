@@ -1,0 +1,116 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+#define MAX_NAME_LENGTH 50
+
+struct Node {
+    char name[MAX_NAME_LENGTH];
+    struct Node* next;
+};
+
+struct Queue {
+    struct Node* front;
+    struct Node* rear;
+};
+
+struct Node* newNode(char name[]) {
+    struct Node* node = (struct Node*)malloc(sizeof(struct Node));
+    strcpy(node->name, name);
+    node->next = NULL;
+    return node;
+}
+
+struct Queue* createQueue() {
+    struct Queue* queue = (struct Queue*)malloc(sizeof(struct Queue));
+    queue->front = queue->rear = NULL;
+    return queue;
+}
+
+int isEmpty(struct Queue* queue) {
+    return (queue->front == NULL);
+}
+
+void enqueue(struct Queue* queue, char name[]) {
+    struct Node* node = newNode(name);
+    if (isEmpty(queue)) {
+        queue->front = queue->rear = node;
+        return;
+    }
+    queue->rear->next = node;
+    queue->rear = node;
+}
+
+char* dequeue(struct Queue* queue) {
+    if (isEmpty(queue)) {
+        printf("Queue underflow\n");
+        return NULL;
+    }
+    struct Node* temp = queue->front;
+    char* name = temp->name;
+    queue->front = queue->front->next;
+    free(temp);
+    return name;
+}
+
+void display(struct Queue* queue) {
+    if (isEmpty(queue)) {
+        printf("Queue is empty\n");
+        return;
+    }
+    struct Node* current = queue->front;
+    printf("Queue elements : ");
+    while (current != NULL) {
+        printf("%s ", current->name);
+        current = current->next;
+    }
+    printf("\n");
+}
+
+int main() {
+    struct Queue* queue = createQueue();
+    int choice, num_names, num_dequeue;
+    char name[MAX_NAME_LENGTH];
+
+    do {
+        printf("\nMenu:\n");
+        printf("1. Enqueue name\n");
+        printf("2. Dequeue name\n");
+        printf("3. Display queue\n");
+        printf("4. Exit\n");
+        printf("Enter your choice: ");
+        scanf("%d", &choice);
+
+        switch (choice) {
+            case 1:
+                printf("Enter the number of names to enqueue: ");
+                scanf("%d", &num_names);
+                for (int i = 0; i < num_names; i++) {
+                    printf("Enter name %d: ", i + 1);
+                    scanf(" %s", name);
+                    enqueue(queue, name);
+                }
+                break;
+            case 2:
+                printf("Enter the number of names to dequeue: ");
+                scanf("%d", &num_dequeue);
+                for (int i = 0; i < num_dequeue; i++) {
+                    char* dequeued_name = dequeue(queue);
+                    if (dequeued_name != NULL) {
+                        printf("Dequeued name: %s\n", dequeued_name);
+                    }
+                }
+                break;
+            case 3:
+                display(queue);
+                break;
+            case 4:
+                printf("Exiting...\n");
+                break;
+            default:
+                printf("Invalid choice!\n");
+        }
+    } while (choice != 4);
+
+    return 0;
+}
