@@ -1,38 +1,109 @@
-//66070503416 Thapana Liamthongkaow
-//Lab 4.3 Tower of Hanoi
-
 #include <stdio.h>
+#include <stdlib.h>
 
-int totalMoves = 0;
+// Define the sorted set data structure
+typedef struct sortedset
+{
+    int *elements;
+    int size;
+} sortedset;
 
-void towerOfHanoi(int n, char source, char auxiliary, char destination) {
-    if (n == 1) {
-        totalMoves++;
-        printf("Move disk 1 from %c to %c\n", source, destination);
+// Function prototypes
+sortedset *init(int size);
+int checkDuplicate(sortedset *s, int target);
+void insertElement(sortedset *s, int newNum);
+void printArray(sortedset *s);
+
+int main()
+{
+    // Initialize a sorted set with a capacity of n elements
+    int k;
+    scanf("%d", &k);
+    sortedset *s = init(k);
+
+    // Insert some elements into the set
+    for (int i = 0; i < k; i++)
+    {
+        int num;
+        scanf("%d", &num);
+        insertElement(s, num);
+    }
+    // Print the contents of the set
+    printArray(s);
+
+    // Free the memory allocated for the set
+    free(s);
+
+    return 0;
+}
+
+// Function definitions
+sortedset *init(int size)
+{
+    sortedset *s = (sortedset *) malloc(sizeof(sortedset));
+
+    if (s == NULL)
+    {
+        printf("Error: unable to allocate memory for sorted set\n");
+        exit(1);
+    }
+
+    s->size = 0;
+    s->elements = (int *) malloc(size * sizeof(int));
+
+    if (s->elements == NULL)
+    {
+        printf("Error: unable to allocate memory for sorted set elements\n");
+        exit(1);
+    }
+
+    return s;
+}
+
+int checkDuplicate(sortedset *s, int target)
+{
+    int i;
+    for (i = 0; i < s->size; i++)
+    {
+        if (s->elements[i] == target)
+        {
+            return 1;
+        }
+    }
+
+    return 0;
+}
+
+void insertElement(sortedset *s, int newNum)
+{
+    int i;
+
+    // Check if the element is a duplicate
+    if (checkDuplicate(s, newNum))
+    {
+        printf("Error: element %d is a duplicate\n", newNum);
         return;
     }
 
-    towerOfHanoi(n - 1, source, destination, auxiliary);
-    totalMoves++;
-    printf("Move disk %d from %c to %c\n", n, source, destination);
-    towerOfHanoi(n - 1, auxiliary, source, destination);
+    // Shift elements to make room for the new element
+    for (i = s->size; i > 0 && s->elements[i - 1] > newNum; i--)
+    {
+        s->elements[i] = s->elements[i - 1];
+    }
+
+    // Insert the new element
+    s->elements[i] = newNum;
+    s->size++;
 }
 
-int main() {
-    int numDisks;
+void printArray(sortedset *s)
+{
+    int i;
 
-    // Get the number of disks from the user
-
-    scanf("%d", &numDisks);
-
-    // Reset the totalMoves variable
-    totalMoves = 0;
-
-    // Call the towerOfHanoi function
-    towerOfHanoi(numDisks, 'A', 'B', 'C');
-
-    // Output the total number of moves
-    printf("Total moves: %d\n", totalMoves);
-
-    return 0;
+    printf("Size: %d\n", s->size);
+    for (i = 0; i < s->size; i++)
+    {
+        printf("%d ", s->elements[i]);
+    }
+    printf("\n");
 }

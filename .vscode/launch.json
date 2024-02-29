@@ -8,8 +8,8 @@
       "args": [],
       "stopAtEntry": false,
       "externalConsole": true,
-      "cwd": "c:/Users/WINNER/OneDrive/เอกสาร/GitHub/CPE112/LAB4",
-      "program": "c:/Users/WINNER/OneDrive/เอกสาร/GitHub/CPE112/LAB4/build/Debug/outDebug",
+      "cwd": "c:/Users/WINNER/OneDrive/เอกสาร/GitHub/CPE112",
+      "program": "c:/Users/WINNER/OneDrive/เอกสาร/GitHub/CPE112/build/Debug/outDebug",
       "MIMode": "gdb",
       "miDebuggerPath": "gdb",
       "setupCommands": [
